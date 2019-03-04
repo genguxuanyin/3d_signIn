@@ -7,9 +7,7 @@ const app = express();
 
 // 引入users.js
 const users = require('./routes/api/users');
-const profiles = require('./routes/api/profiles');
-const goods = require('./routes/api/goods');
-const orders = require('./routes/api/orders');
+const activities = require('./routes/api/activities');
 
 app.use(express.static(path.join(__dirname, 'uploads')));
 // DB config
@@ -41,9 +39,7 @@ require('./config/passport')(passport);
 
 // 使用routes
 app.use('/api/users', users);
-app.use('/api/profiles', profiles);
-app.use('/api/goods', goods);
-app.use('/api/orders', orders);
+app.use('/api/activities', activities);
 
 /* //处理404
 app.use(function (req, res, next) {

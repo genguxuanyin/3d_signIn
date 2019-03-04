@@ -8,12 +8,6 @@
         active-text-color="#409eff"
         class="el-menu-vertical-demo"
       >
-        <router-link to="/home">
-          <el-menu-item index="0">
-            <i class="el-icon-tickets"></i>
-            <span slot="title">首页</span>
-          </el-menu-item>
-        </router-link>
         <template v-for="item in items">
           <el-submenu v-if="item.children" :index="item.path" :key="item.path">
             <template slot="title">
@@ -26,6 +20,12 @@
               </el-menu-item>
             </router-link>
           </el-submenu>
+          <router-link v-else :to="item.path" :index="item.path" :key="item.path">
+            <el-menu-item :index="item.path">
+              <i :class="item.icon"></i>
+              <span slot="title">{{item.name}}</span>
+            </el-menu-item>
+          </router-link>
         </template>
       </el-menu>
     </el-col>
@@ -38,84 +38,42 @@ export default {
     return {
       items: [
         {
+          icon: "el-icon-tickets",
+          name: "首页",
+          path: "home"
+        },
+        {
           icon: "el-icon-menu",
-          name: "统计",
-          path: "statistics",
-          children: [
-            {
-              path: "statisticsUser",
-              name: "用户分析"
-            },
-            {
-              path: "statisticsOrder",
-              name: "订单分析"
-            }
-          ]
+          name: "活动管理",
+          path: "manageActivity"
         },
         {
           icon: "el-icon-edit-outline",
+          name: "我的活动",
+          path: "myActivity"
+        },
+        {
+          icon: "el-icon-star-on",
           name: "管理",
           path: "manage",
           children: [
             {
-              path: "manageUser",
-              name: "用户管理"
+              path: "signIn",
+              name: "签到"
             },
             {
-              path: "manageTicket",
-              name: "卡券管理"
+              path: "message",
+              name: "留言"
             },
             {
-              path: "manageGoods",
-              name: "商品管理"
+              path: "prize",
+              name: "中奖"
             },
             {
-              path: "manageOrder",
-              name: "订单管理"
+              path: "game",
+              name: "对对碰"
             }
           ]
-        },
-        {
-          icon: "el-icon-star-on",
-          name: "开发",
-          path: "develop",
-          children: [
-            {
-              path: "developConfig",
-              name: "基本配置"
-            },
-            {
-              path: "developLimit",
-              name: "接入权限"
-            }
-          ]
-        },
-        {
-          icon: "el-icon-setting",
-          name: "设置",
-          path: "setting",
-          children: [
-            {
-              path: "settingInfo",
-              name: "平台信息"
-            },
-            {
-              path: "personalInfo",
-              name: "个人信息"
-            }
-          ]
-        },
-        {
-          icon: "el-icon-news",
-          name: "资金管理",
-          path: "fund",
-          children: [{ path: "foundlist", name: "资金流水" }]
-        },
-        {
-          icon: "el-icon-document",
-          name: "信息管理",
-          path: "info",
-          children: [{ path: "infoshow", name: "个人信息" }]
         }
       ]
     };

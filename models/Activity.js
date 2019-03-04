@@ -1,23 +1,47 @@
 const sequelize = require('../db/connect');
 const Sequelize = require('sequelize');
 const moment = require('moment');
-const OrderRefGoods = sequelize.define('t_orders_goods_ref', {
+const Activitys = sequelize.define('t_activity', {
     id:{
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    amount: {
+    name: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    num: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    tGoodId:{
-        type: Sequelize.INTEGER,
+    contact: {
+        type: Sequelize.STRING,
         allowNull: false
     },
-    tOrderId:{
-        type: Sequelize.INTEGER,
+    phone: {
+        type: Sequelize.STRING,
         allowNull: false
+    },
+    startTime: {
+        type: Sequelize.DATE,
+        get() {
+            return moment(this.getDataValue('startTime')).format('YYYY-MM-DD');
+        }
+    },
+    validity: {
+        type: Sequelize.INTEGER
+    },
+    account: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    password: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    remark: {
+        type: Sequelize.STRING
     },
     createdAt: {
         type: Sequelize.DATE,
@@ -31,8 +55,6 @@ const OrderRefGoods = sequelize.define('t_orders_goods_ref', {
             return moment(this.getDataValue('updatedAt')).format('YYYY-MM-DD HH:mm:ss');
         }
     }
-},{
-    freezeTableName: true
 });
 
-module.exports = OrderRefGoods;
+module.exports = Activitys;

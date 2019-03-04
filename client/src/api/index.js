@@ -20,21 +20,11 @@ export const addOrEditUser = (url, params) => ajax(`${BASE_URL}/users/${url}`, p
 export const editUserInfoById = (id, params) => ajax(`${BASE_URL}/users/edit/${id}`, params, 'POST');
 
 
-// 2.4 商品数据
-export const getGoods = () => ajax(`${BASE_URL}/goods`);
-// 2.5 编辑商品数据
-export const editGoods = (id, params) => ajax(`${BASE_URL}/goods/edit/${id}`, params, 'POST');
-// 2.3 增加或编辑商品信息
-export const addOrEditGoods = (url, params) => ajax(`${BASE_URL}/goods/${url}`, params, 'POST');
-// 2.5 删除商品数据
-export const deleteGoods = (id) => ajax(`${BASE_URL}/goods/${id}`, false, 'DELETE');
-
-
-// 2.5 订单数据
-export const getOrders = () => ajax(`${BASE_URL}/orders`);
-// 2.5 编辑订单数据
-export const editOrders = (id, params) => ajax(`${BASE_URL}/orders/edit/${id}`, params, 'POST');
-// 2.3 增加或编辑订单信息
-export const addOrEditOrders = (url, params) => ajax(`${BASE_URL}/orders/${url}`, params, 'POST');
-// 2.5 删除订单数据
-export const deleteOrders = (id) => ajax(`${BASE_URL}/orders/${id}`, false, 'DELETE');
+// 2.4 活动数据
+export const getActivities = () => ajax(`${BASE_URL}/activities`);
+// 2.5 编辑活动数据
+export const editActivities = (id, params) => ajax(`${BASE_URL}/activities/edit/${id}`, params, 'POST');
+// 2.3 增加或编辑活动信息
+export const addOrEditActivities = (url, params) => ajax(`${BASE_URL}/activities/${url}`, params, 'POST');
+// 2.5 删除活动数据
+export const deleteActivities = (id) => ajax(`${BASE_URL}/activities/delete/${id}`, false, 'DELETE');

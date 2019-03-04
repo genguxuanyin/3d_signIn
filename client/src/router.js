@@ -5,17 +5,7 @@ import Register from './views/Register'
 import Nofind from './views/404'
 import Login from './views/Login'
 import Home from './views/Home'
-import InfoShow from './views/InfoShow'
-import FoundList from './views/FoundList'
-import StatisticsUser from './views/statistics/StatisticsUser'
-import ManageUser from './views/manage/ManageUser'
-// import ManageTicket from './views/ManageTicket'
-import ManageGoods from './views/manage/ManageGoods'
-import ManageOrder from './views/manage/ManageOrder'
-// import DevelopConfig from './views/DevelopConfig'
-// import DevelopLimit from './views/DevelopLimit'
-// import SettingInfo from './views/SettingInfo'
-import Setting from './views/setting/PersonalInfo'
+import ManageActivity from './views/manage/ManageActivity'
 
 Vue.use(Router)
 
@@ -34,17 +24,7 @@ const router = new Router({
       children: [
         { path: '', component: Home },
         { path: '/home', name: 'home', component: Home },
-        { path: '/infoshow', name: 'infoshow', component: InfoShow },
-        { path: '/foundlist', name: 'foundlist', component: FoundList },
-        { path: '/statisticsUser', name: 'statisticsUser', component: StatisticsUser },
-        { path: '/manageUser', name: 'manageUser', component: ManageUser },
-        // { path: '/manageTicket', name: 'manageTicket', component: ManageTicket },
-        { path: '/manageGoods', name: 'manageGoods', component: ManageGoods },
-        { path: '/manageOrder', name: 'manageOrder', component: ManageOrder },
-        // { path: '/developConfig', name: 'developConfig', component: DevelopConfig },
-        // { path: '/developLimit', name: 'developLimit', component: DevelopLimit },
-        // { path: '/settingInfo', name: 'settingInfo', component: SettingInfo },
-        { path: '/personalInfo', name: 'personalInfo', component: Setting } 
+        { path: '/manageActivity', name: 'manageActivity', component: ManageActivity }
       ]
     },
 

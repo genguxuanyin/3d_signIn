@@ -3,7 +3,7 @@ const db = {
     host: 'localhost',
     user: 'root',
     password: 'zx123456',
-    database: 'weixin',
+    database: '3dsignin',
     port: 3306
 };
 var sequelize = new Sequelize(db.database, db.user, db.password, {
