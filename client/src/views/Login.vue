@@ -87,7 +87,7 @@ export default {
             })
             .catch(err => {
               this.$message({
-                message: "登录失败,请重新登录",
+                message: err.response.data,
                 type: "error"
               });
             });

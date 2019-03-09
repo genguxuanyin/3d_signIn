@@ -57,11 +57,11 @@
             <span style="color:#4db3ff">{{ scope.row.validity }}天</span>
           </template>
         </el-table-column>
-        <el-table-column prop="account" label="关联用户名" align="center" width="100">
+        <!-- <el-table-column prop="account" label="关联用户名" align="center" width="100">
           <template slot-scope="scope">
             <span style="color:#00d053">{{ scope.row.account }}</span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="remark" label="备注" align="center" width="150"></el-table-column>
         <el-table-column prop="createdAt" label="创建时间" align="center" width="220" sortable>
           <template slot-scope="scope">
@@ -76,20 +76,20 @@
             >{{ getStatus(scope.row.startTime,scope.row.validity,scope.row.status).value }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="operation" align="center" label="操作" fixed="right" width="210">
+        <el-table-column prop="operation" align="center" label="操作" fixed="right" width="260">
           <template slot-scope="scope">
             <el-button
-              :type="scope.row.status==0||scope.row.status==-1?'primary':'danger'"
-              :disabled="getStatus(scope.row.startTime,scope.row.validity,scope.row.status).status == '1_2'"
+              :type="scope.row.status==0?'warning':'primary'"
+              v-if="scope.row.status == -1||scope.row.status==0"
               icon="delete"
               size="small"
-              @click="onEditGoodsStatus(scope.row.id,+!scope.row.status)"
-            >{{scope.row.status==0||scope.row.status==-1?'启用':'禁用'}}</el-button>
-            <el-button
+              @click="onEditGoodsStatus(scope.row.id,scope.row.status == -1?0:-1)"
+            >{{scope.row.status==-1?'提交审核':'撤回'}}</el-button>
+            <el-button 
               type="warning"
-              :disabled="scope.row.status!==-1"
-              icon="edit"
-              size="small"
+              v-if="scope.row.status == -1"
+              icon="edit" 
+              size="small" 
               @click="onEditGoods(scope.row)"
             >编辑</el-button>
             <el-button
@@ -125,12 +125,12 @@
 </template>
 
 <script>
-import DialogActivity from "../../components/DialogActivity";
+import DialogActivity from "../components/DialogActivity";
 import {
-  getActivities as _getActivities,
+  getActivitiesByAccount as _getActivities,
   editActivities,
   deleteActivities
-} from "../../api/index";
+} from "../api/index";
 
 export default {
   name: "activitylist",
@@ -172,13 +172,13 @@ export default {
   components: {
     DialogActivity
   },
-  created() {
+  created(){
     this.getActivities();
   },
   methods: {
     getActivities() {
       // 获取表格数据
-      _getActivities()
+      _getActivities(this.user.name)
         .then(res => {
           console.log(res.data);
           // this.tableData = res.data;
@@ -202,7 +202,8 @@ export default {
       this.dialog = {
         show: true,
         title: "修改活动信息",
-        option: "edit"
+        option: "edit",
+        isCurrentUser: true
       };
       this.form = {
         id: row.id,
@@ -253,10 +254,12 @@ export default {
     },
     onAddMoney() {
       // 添加
+      debugger
       this.dialog = {
         show: true,
         title: "添加活动信息",
-        option: "add"
+        option: "add",
+        isCurrentUser: true
       };
       this.form = {
         name: "",
@@ -265,7 +268,7 @@ export default {
         phone: "",
         startTime: "",
         validity: "",
-        account: "",
+        account: this.user.name,
         remark: ""
       };
     },
@@ -321,19 +324,19 @@ export default {
         const currentTime = new Date();
         if (status === -1) {
           return {
-            status: "-1",
+            status: '-1',
             color: "#606266",
             value: "未提交"
           };
         } else if (status === 0) {
           return {
-            status: "0",
+            status: '0',
             color: "#f00",
             value: "待审核"
           };
         } else if (currentTime.getTime() < startTime.getTime()) {
           return {
-            status: "1_0",
+            status: '1_0',
             color: "#606266",
             value: "未开始"
           };
@@ -343,19 +346,27 @@ export default {
             startTime.getTime() + validity * 24 * 60 * 60 * 1000
         ) {
           return {
-            status: "1_1",
+            status: '1_1',
             color: "#409EFF",
             value: "正在进行"
           };
         } else {
           return {
-            status: "1_2",
+            status: '1_2',
             color: "#909399",
             value: "已结束"
           };
         }
       };
+    },
+    user() {
+      return this.$store.getters.user;
     }
+  },
+  watch:{
+    user() {
+        this.getActivities();
+    },
   }
 };
 </script>

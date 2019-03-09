@@ -44,6 +44,11 @@ export default {
         },
         {
           icon: "el-icon-menu",
+          name: "用户管理",
+          path: "manageUser"
+        },
+        {
+          icon: "el-icon-menu",
           name: "活动管理",
           path: "manageActivity"
         },

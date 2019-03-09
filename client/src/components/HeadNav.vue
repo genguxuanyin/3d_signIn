@@ -2,11 +2,19 @@
   <header class="head-nav">
     <el-row>
       <el-col :span="6" class="logo-container">
-        <img src="../assets/logo.png" class="logo" alt>
-        <span class="title">滴答空间后台管理系统</span>
+        <img :src="data.logo" class="logo" alt>
+        <span class="title">{{data.title}}</span>
       </el-col>
+      <template v-if="menus.length>0">
+        <el-col :span="1" v-for="(item,index) in menus" :key="index">
+          <div class="menu-container" @click="menuClick(index)">
+            <i :class="'fa fa-margin fa-2x '+item.icon" class="logo"></i>
+            <span class="title">{{item.title}}</span>
+          </div>
+        </el-col>
+      </template>
       <el-col :span="6" class="user">
-        <div class="userinfo">
+        <div class="userinfo" v-if="data.isShowPresonalInfo">
           <img
             v-if="user.avatar"
             :src="user.avatar.startsWith('//www.gravatar.com')?user.avatar:baseUrl+user.avatar"
@@ -36,6 +44,50 @@
 <script>
 export default {
   name: "head-nav",
+  data() {
+    return {
+      menus: [
+        {
+          icon: "fa-server",
+          title: "管理",
+          isSelected: false
+        },
+        {
+          icon: "fa-music",
+          title: "背景音乐",
+          isSelected: false
+        },
+        {
+          icon: "fa-qrcode",
+          title: "二维码",
+          isSelected: false
+        },
+        {
+          icon: "fa-whatsapp",
+          title: "弹幕",
+          isSelected: false
+        },
+        {
+          icon: "fa-cubes",
+          title: "应用",
+          isSelected: false
+        },
+        {
+          icon: "fa-compass",
+          title: "全屏",
+          isSelected: false
+        },
+        {
+          icon: "fa-cog",
+          title: "设置",
+          isSelected: false
+        }
+      ]
+    };
+  },
+  props: {
+    data: Object
+  },
   computed: {
     user() {
       return this.$store.getters.user;
@@ -67,6 +119,9 @@ export default {
 
       // 页面跳转
       this.$router.push("/login");
+    },
+    menuClick(index){
+      console.log(this.menus[index]);
     }
   }
 };
@@ -136,5 +191,25 @@ export default {
 }
 .el-dropdown {
   color: #fff;
+}
+.menu-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor:pointer;
+}
+.menu-container .logo{
+  width: 2rem /* 40/20 */;
+  height: 2rem /* 40/20 */;
+}
+.menu-container .title{
+  line-height: 2rem /* 40/20 */;
+  font-size: .9rem /* 18/20 */;
+}
+.menu-container:hover .title{
+  font-size: .95rem /* 19/20 */;
+  font-weight: 600;
+  color: #409eff;
 }
 </style>

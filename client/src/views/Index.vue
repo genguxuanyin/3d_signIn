@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <HeadNav></HeadNav>
+    <HeadNav :data="headData"></HeadNav>
     <LeftMenu></LeftMenu>
     <div class="rightContainer">
       <router-view></router-view>
@@ -14,6 +14,15 @@ import LeftMenu from "../components/LeftMenu";
 
 export default {
   name: "index",
+  data(){
+    return {
+      headData:{
+        logo:'../../images/logo.png',
+        title:'滴答空间后台管理系统',
+        isShowPresonalInfo:true
+      }
+    }
+  },
   components: {
     HeadNav,
     LeftMenu

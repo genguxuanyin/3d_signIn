@@ -85,9 +85,6 @@ router.post('/login', (req, res, next) => {
                         name: account
                     },
                     {
-                        phone: account
-                    },
-                    {
                         email: account
                     }
                 ]
@@ -180,15 +177,9 @@ router.post(
     }),
     (req, res, next) => {
         const _user = {};
-        if (req.body.nickName != undefined) _user.nickName = req.body.nickName;
         if (req.body.name != undefined) _user.name = req.body.name;
-        if (req.body.sex != undefined) _user.sex = req.body.sex;
-        if (req.body.birthday != undefined) _user.birthday = req.body.birthday;
-        if (req.body.phone != undefined) _user.phone = req.body.phone;
-        if (req.body.cardNum != undefined) _user.cardNum = req.body.cardNum;
         if (req.body.email != undefined) _user.email = req.body.email;
         if (req.body.password != undefined) _user.password = req.body.password;
-        if (req.body.avatar != undefined) _user.avatar = req.body.avatar;
         if (req.body.status != undefined) _user.status = req.body.status;
         User.update(_user, {
             where: {

@@ -22,9 +22,13 @@ export const editUserInfoById = (id, params) => ajax(`${BASE_URL}/users/edit/${i
 
 // 2.4 活动数据
 export const getActivities = () => ajax(`${BASE_URL}/activities`);
-// 2.5 编辑活动数据
+// 2.4 根据当前用户活动数据
+export const getActivitiesByAccount = (account) => ajax(`${BASE_URL}/activities/${account}`);
+// 2.4 根据当前活动id获取活动数据
+export const getActivitiesById = (id) => ajax(`${BASE_URL}/activities/show/${id}`);
+// 2.6 编辑活动数据
 export const editActivities = (id, params) => ajax(`${BASE_URL}/activities/edit/${id}`, params, 'POST');
-// 2.3 增加或编辑活动信息
+// 2.7 增加或编辑活动信息
 export const addOrEditActivities = (url, params) => ajax(`${BASE_URL}/activities/${url}`, params, 'POST');
-// 2.5 删除活动数据
+// 2.8 删除活动数据
 export const deleteActivities = (id) => ajax(`${BASE_URL}/activities/delete/${id}`, false, 'DELETE');

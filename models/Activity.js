@@ -36,12 +36,11 @@ const Activitys = sequelize.define('t_activity', {
         type: Sequelize.STRING,
         allowNull: false
     },
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
     remark: {
         type: Sequelize.STRING
+    },
+    status: {
+        type: Sequelize.INTEGER
     },
     createdAt: {
         type: Sequelize.DATE,

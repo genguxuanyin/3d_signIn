@@ -17,12 +17,15 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="registerUser.email" placeholder="请输入邮箱"></el-input>
         </el-form-item>
-        <el-form-item label="选择身份">
+        <!-- <el-form-item label="选择身份">
           <el-select v-model="registerUser.identity" placeholder="请选择身份">
             <el-option label="管理员" value="manager"></el-option>
-            <el-option label="员工" value="employee"></el-option>
+            <el-option label="普通用户" value="employee"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="校验码" prop="code" v-if="registerUser.identity == 'manager'">
+          <el-input v-model="registerUser.code" placeholder="请输入校验码"></el-input>
+        </el-form-item> -->
         <el-form-item label="密码" prop="password">
           <el-input v-model="registerUser.password" placeholder="请输入密码" type="password"></el-input>
         </el-form-item>
@@ -67,7 +70,7 @@ export default {
         email: "",
         password: "",
         password2: "",
-        identity: ""
+        identity: "employee"
       },
       rules: {
         name: [

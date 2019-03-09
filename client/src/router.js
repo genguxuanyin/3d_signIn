@@ -5,7 +5,10 @@ import Register from './views/Register'
 import Nofind from './views/404'
 import Login from './views/Login'
 import Home from './views/Home'
+import MyActivity from './views/MyActivity'
+import Activity from './views/Activity'
 import ManageActivity from './views/manage/ManageActivity'
+import ManageUser from './views/manage/ManageUser'
 
 Vue.use(Router)
 
@@ -17,6 +20,7 @@ const router = new Router({
     { path: '/', redirect: '/index' },
     { path: '/register', name: 'register', component: Register },
     { path: '/login', name: 'login', component: Login },
+    { path: '/activity/:id', name: 'activity', component: Activity },
     {
       path: '/index',
       name: 'index',
@@ -24,7 +28,9 @@ const router = new Router({
       children: [
         { path: '', component: Home },
         { path: '/home', name: 'home', component: Home },
-        { path: '/manageActivity', name: 'manageActivity', component: ManageActivity }
+        { path: '/myActivity', name: 'myActivity', component: MyActivity },
+        { path: '/manageActivity', name: 'manageActivity', component: ManageActivity },
+        { path: '/manageUser', name: 'manageUser', component: ManageUser }
       ]
     },
 
