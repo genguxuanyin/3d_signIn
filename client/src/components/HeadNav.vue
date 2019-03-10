@@ -1,12 +1,12 @@
 <template>
   <header class="head-nav">
     <el-row>
-      <el-col :span="6" class="logo-container">
+      <el-col :span="8" class="logo-container">
         <img :src="data.logo" class="logo" alt>
         <span class="title">{{data.title}}</span>
       </el-col>
-      <template v-if="menus.length>0">
-        <el-col :span="1" v-for="(item,index) in menus" :key="index">
+      <template v-if="data.menus&&data.menus.length>0">
+        <el-col :span="1" v-for="(item,index) in data.menus" :key="index">
           <div class="menu-container" @click="menuClick(index)">
             <i :class="'fa fa-margin fa-2x '+item.icon" class="logo"></i>
             <span class="title">{{item.title}}</span>
@@ -46,43 +46,7 @@ export default {
   name: "head-nav",
   data() {
     return {
-      menus: [
-        {
-          icon: "fa-server",
-          title: "管理",
-          isSelected: false
-        },
-        {
-          icon: "fa-music",
-          title: "背景音乐",
-          isSelected: false
-        },
-        {
-          icon: "fa-qrcode",
-          title: "二维码",
-          isSelected: false
-        },
-        {
-          icon: "fa-whatsapp",
-          title: "弹幕",
-          isSelected: false
-        },
-        {
-          icon: "fa-cubes",
-          title: "应用",
-          isSelected: false
-        },
-        {
-          icon: "fa-compass",
-          title: "全屏",
-          isSelected: false
-        },
-        {
-          icon: "fa-cog",
-          title: "设置",
-          isSelected: false
-        }
-      ]
+      
     };
   },
   props: {

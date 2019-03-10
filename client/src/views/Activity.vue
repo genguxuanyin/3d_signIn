@@ -16,14 +16,56 @@ export default {
   data() {
     return {
       activity: {},
-      headData:{
-        logo:'../../images/logo.png',
-        title:'',
-        isShowPresonalInfo:true
+      headData: {
+        logo: "../../images/logo.png",
+        title: "云南智巢科技有限责任公司年会",
+        isShowPresonalInfo: true,
+        menus: [
+          {
+            icon: "fa-server",
+            title: "首页",
+            isSelected: false
+          },
+          {
+            icon: "fa-server",
+            title: "管理",
+            isSelected: false
+          },
+          {
+            icon: "fa-music",
+            title: "音乐",
+            isSelected: false
+          },
+          {
+            icon: "fa-qrcode",
+            title: "二维码",
+            isSelected: false
+          },
+          {
+            icon: "fa-whatsapp",
+            title: "弹幕",
+            isSelected: false
+          },
+          {
+            icon: "fa-cubes",
+            title: "应用",
+            isSelected: false
+          },
+          {
+            icon: "fa-compass",
+            title: "全屏",
+            isSelected: false
+          },
+          {
+            icon: "fa-cog",
+            title: "设置",
+            isSelected: false
+          }
+        ]
       }
     };
   },
-  components: {HeadNav},
+  components: { HeadNav },
   created() {
     this.getActivitiesById(this.$route.params.id);
   },
@@ -66,6 +108,5 @@ export default {
   top: 0;
   width: 100%;
   height: calc(100% - 71px);
-  overflow: auto;
 }
 </style>

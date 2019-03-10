@@ -13,6 +13,7 @@
   "author": "genguxuanyin",
   "license": "ISC",
   "dependencies": {
+    "@tweenjs/tween.js": "^17.3.0",
     "bcrypt": "^2.0.1",
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",

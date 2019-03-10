@@ -9,6 +9,7 @@ import MyActivity from './views/MyActivity'
 import Activity from './views/Activity'
 import ManageActivity from './views/manage/ManageActivity'
 import ManageUser from './views/manage/ManageUser'
+import ActivityHome from './views/activity/ActivityHome'
 
 Vue.use(Router)
 
@@ -20,7 +21,12 @@ const router = new Router({
     { path: '/', redirect: '/index' },
     { path: '/register', name: 'register', component: Register },
     { path: '/login', name: 'login', component: Login },
-    { path: '/activity/:id', name: 'activity', component: Activity },
+    {
+      path: '/activity/:id', name: 'activity', component: Activity, children: [
+        { path: '', component: ActivityHome },
+        { path: '/home', name: 'home', component: ActivityHome }
+      ]
+    },
     {
       path: '/index',
       name: 'index',
