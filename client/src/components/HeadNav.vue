@@ -7,7 +7,7 @@
       </el-col>
       <template v-if="data.menus&&data.menus.length>0">
         <el-col :span="1" v-for="(item,index) in data.menus" :key="index">
-          <div class="menu-container" @click="menuClick(index)">
+          <div class="menu-container" @click="clickMenu(index)">
             <i :class="'fa fa-margin fa-2x '+item.icon" class="logo"></i>
             <span class="title">{{item.title}}</span>
           </div>
@@ -50,7 +50,11 @@ export default {
     };
   },
   props: {
-    data: Object
+    data: Object,
+    clickMenu: {
+        type: Function,
+        default: ()=>{}
+    }
   },
   computed: {
     user() {
@@ -83,9 +87,6 @@ export default {
 
       // 页面跳转
       this.$router.push("/login");
-    },
-    menuClick(index){
-      console.log(this.menus[index]);
     }
   }
 };

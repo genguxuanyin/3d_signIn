@@ -1,6 +1,6 @@
 <template>
   <div class="activity">
-    <HeadNav :data="headData"></HeadNav>
+    <HeadNav :data="headData" :clickMenu="clickMenu"></HeadNav>
     <div class="container">
       <router-view></router-view>
     </div>
@@ -88,6 +88,44 @@ export default {
             });
           }
         });
+    },
+    clickMenu(index) {
+      switch (index) {
+        case 1:
+          debugger
+          this.$router.push({ path: '/home' })
+          break;
+        case 6:
+          this.screenView();
+          break;
+      }
+    },
+    screenView(e) {
+      if (
+        window.outerHeigth == screen.heigth &&
+        window.outerWidth == screen.width
+      ) {
+        this.headData.menus[6].title = "退出";
+        var docElm = document.documentElement;
+        if (docElm.requestFullscreen) {
+          docElm.requestFullscreen();
+        } else if (docElm.mozRequestFullScreen) {
+          docElm.mozRequestFullScreen();
+        } else if (docElm.webkitRequestFullScreen) {
+          docElm.webkitRequestFullScreen();
+        } else if (elem.msRequestFullscreen) {
+          elem.msRequestFullscreen();
+        }
+      } else {
+        this.headData.menus[6].title = "全屏";
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
+      }
     }
   },
   computed: {

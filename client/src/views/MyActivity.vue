@@ -92,6 +92,12 @@
               size="small" 
               @click="onEditGoods(scope.row)"
             >编辑</el-button>
+            <el-button 
+              type="success"
+              v-if="getStatus(scope.row.startTime,scope.row.validity,scope.row.status).status =='1_1'"
+              size="small" 
+              @click="toActivity(scope.row.id)"
+            >进入</el-button>
             <el-button
               type="danger"
               icon="delete"
@@ -271,6 +277,9 @@ export default {
         account: this.user.name,
         remark: ""
       };
+    },
+    toActivity(id){
+      this.$router.push({ path: `/activity/${id}` });
     },
     handleCurrentChange(page) {
       // 当前页

@@ -10,6 +10,7 @@ import Activity from './views/Activity'
 import ManageActivity from './views/manage/ManageActivity'
 import ManageUser from './views/manage/ManageUser'
 import ActivityHome from './views/activity/ActivityHome'
+import SignIn from './views/mobile/SignIn'
 
 Vue.use(Router)
 
@@ -23,9 +24,11 @@ const router = new Router({
     { path: '/login', name: 'login', component: Login },
     {
       path: '/activity/:id', name: 'activity', component: Activity, children: [
-        { path: '', component: ActivityHome },
-        { path: '/home', name: 'home', component: ActivityHome }
+        { path: '', name:'activityHome',component: ActivityHome }
       ]
+    },
+    {
+      path: '/signIn/:id', name: 'signIn', component: SignIn
     },
     {
       path: '/index',

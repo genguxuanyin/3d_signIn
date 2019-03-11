@@ -122,7 +122,7 @@ export default {
 
         var object = new THREE.Object3D();
 
-        spherical.set(1000, phi, theta);
+        spherical.set(2000, phi, theta);
 
         object.position.setFromSpherical(spherical);
 
@@ -145,7 +145,7 @@ export default {
         }
       }
 
-      this.transform(this.targets.logo, 3000);
+      this.transform(this.targets.sphere, 3000);
     },
     process(object) {
       if (this.smoothing) {
@@ -165,6 +165,7 @@ export default {
       }
 
       const onLoad = paths => {
+        debugger
         var group = new THREE.Group();
         group.scale.multiplyScalar(0.25);
         group.position.x = -70;

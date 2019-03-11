@@ -15,7 +15,7 @@ export default {
   data(){
     return {
       cameraPosition: { x: 0, y: 0, z: 5000 },
-      src:"../../svg/tiger.svg"
+      src:"../../svg/2.svg"
     }
   },
   components:{
