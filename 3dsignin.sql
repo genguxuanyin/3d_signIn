@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80013
 File Encoding         : 65001
 
-Date: 2019-03-27 13:56:43
+Date: 2019-03-27 17:19:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,13 +48,37 @@ INSERT INTO `t_activities` VALUES ('54', '6', '19-88', '6', '6', '2019-03-26', '
 INSERT INTO `t_activities` VALUES ('55', '7', '19-88', '赵璇', '18213917293', '2019-03-11', '7', 'zx', '7', '1', '2019-03-11 16:09:56', '2019-03-11 16:12:27');
 
 -- ----------------------------
+-- Table structure for `t_danmakus`
+-- ----------------------------
+DROP TABLE IF EXISTS `t_danmakus`;
+CREATE TABLE `t_danmakus` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `tSignInUserId` int(8) NOT NULL,
+  `tActivityId` int(8) NOT NULL,
+  `message` varchar(256) DEFAULT '',
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `f2` (`tSignInUserId`),
+  KEY `f1` (`tActivityId`),
+  CONSTRAINT `f1` FOREIGN KEY (`tActivityId`) REFERENCES `t_activities` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `f2` FOREIGN KEY (`tSignInUserId`) REFERENCES `t_signinusers` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_danmakus
+-- ----------------------------
+INSERT INTO `t_danmakus` VALUES ('1', '35', '45', '大奖一定是我的大奖一定是我的大奖一定是我的大奖一定是我的', '2019-03-27 16:19:43', '2019-03-27 16:19:49');
+INSERT INTO `t_danmakus` VALUES ('2', '36', '45', '拉拉拉拉的法律大家', '2019-03-27 16:20:12', '2019-03-27 16:20:14');
+
+-- ----------------------------
 -- Table structure for `t_signinusers`
 -- ----------------------------
 DROP TABLE IF EXISTS `t_signinusers`;
 CREATE TABLE `t_signinusers` (
   `id` int(16) NOT NULL AUTO_INCREMENT,
   `wechatId` varchar(255) NOT NULL,
-  `activityId` int(16) NOT NULL,
+  `tActivityId` int(16) NOT NULL,
   `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `createdAt` datetime NOT NULL,
@@ -63,8 +87,8 @@ CREATE TABLE `t_signinusers` (
   PRIMARY KEY (`id`),
   KEY `indexs_id` (`id`) USING BTREE,
   KEY `name` (`name`),
-  KEY `f0` (`activityId`),
-  CONSTRAINT `f0` FOREIGN KEY (`activityId`) REFERENCES `t_activities` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  KEY `f0` (`tActivityId`),
+  CONSTRAINT `f0` FOREIGN KEY (`tActivityId`) REFERENCES `t_activities` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -108,19 +132,19 @@ DROP TABLE IF EXISTS `t_wins`;
 CREATE TABLE `t_wins` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `activityId` int(8) NOT NULL,
-  `signInUserID` int(8) NOT NULL,
+  `tActivityId` int(8) NOT NULL,
+  `tSignInUserId` int(8) NOT NULL,
   `grade` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
   `remark` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `status` int(2) NOT NULL DEFAULT '1',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `activityId` (`activityId`),
-  KEY `signInUserID` (`signInUserID`),
+  KEY `activityId` (`tActivityId`),
+  KEY `signInUserID` (`tSignInUserId`),
   KEY `indexs_id` (`id`) USING BTREE,
-  CONSTRAINT `t_wins_ibfk_1` FOREIGN KEY (`activityId`) REFERENCES `t_activities` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `t_wins_ibfk_2` FOREIGN KEY (`signInUserID`) REFERENCES `t_signinusers` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+  CONSTRAINT `t_wins_ibfk_1` FOREIGN KEY (`tActivityId`) REFERENCES `t_activities` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `t_wins_ibfk_2` FOREIGN KEY (`tSignInUserId`) REFERENCES `t_signinusers` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
