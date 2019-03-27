@@ -32,3 +32,19 @@ export const editActivities = (id, params) => ajax(`${BASE_URL}/activities/edit/
 export const addOrEditActivities = (url, params) => ajax(`${BASE_URL}/activities/${url}`, params, 'POST');
 // 2.8 删除活动数据
 export const deleteActivities = (id) => ajax(`${BASE_URL}/activities/delete/${id}`, false, 'DELETE');
+
+//管理
+//签到列表
+export const getSignInList = () => ajax(`${BASE_URL}/signInUsers`);
+//留言列表
+export const getDanmakuList = () => ajax(`${BASE_URL}/danmakus`);
+
+// 2.1 用户签到
+export const signIn = (user) => ajax(`${BASE_URL}/signInUsers/signIn`, user, 'POST');
+// 2.3 根据用户ID获取用户信息
+export const getSignInUserInfoById = (id) => ajax(`${BASE_URL}/signInUsers/${id}`);
+
+// 2.1 添加获奖信息
+export const addWin = (user) => ajax(`${BASE_URL}/wins/add`, user, 'POST');
+// 2.3 根据活动ID和用户ID获取获奖信息
+export const getWin = (activityIdAndUserId) => ajax(`${BASE_URL}/wins/`, activityIdAndUserId, 'POST');

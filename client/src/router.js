@@ -9,37 +9,110 @@ import MyActivity from './views/MyActivity'
 import Activity from './views/Activity'
 import ManageActivity from './views/manage/ManageActivity'
 import ManageUser from './views/manage/ManageUser'
+import ManageSignIn from './views/manage/ManageSignIn'
+import ManageDanmaku from './views/manage/ManageDanmaku'
+import ManageWin from './views/manage/ManageWin'
+import ManageGame from './views/manage/ManageGame'
 import ActivityHome from './views/activity/ActivityHome'
 import SignIn from './views/mobile/SignIn'
+import MHome from './views/mobile/MHome'
+import Win from './views/mobile/Win'
 
 Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes: [
-    { path: '*', name: '/404', component: Nofind },
-    { path: '/', redirect: '/index' },
-    { path: '/register', name: 'register', component: Register },
-    { path: '/login', name: 'login', component: Login },
-    {
-      path: '/activity/:id', name: 'activity', component: Activity, children: [
-        { path: '', name:'activityHome',component: ActivityHome }
-      ]
+  routes: [{
+      path: '*',
+      name: '/404',
+      component: Nofind
     },
     {
-      path: '/signIn/:id', name: 'signIn', component: SignIn
+      path: '/',
+      redirect: '/index'
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/activity/:id',
+      component: Activity,
+      children: [{
+        path: '',
+        name: 'activityHome',
+        component: ActivityHome
+      }]
+    },
+    {
+      path: '/signIn/:id',
+      name: 'signIn',
+      component: SignIn
+    },
+    {
+      path: '/mHome',
+      name: 'mHome',
+      component: MHome
+    },
+    {
+      path: '/win',
+      name: 'win',
+      component: Win
     },
     {
       path: '/index',
-      name: 'index',
       component: Index,
-      children: [
-        { path: '', component: Home },
-        { path: '/home', name: 'home', component: Home },
-        { path: '/myActivity', name: 'myActivity', component: MyActivity },
-        { path: '/manageActivity', name: 'manageActivity', component: ManageActivity },
-        { path: '/manageUser', name: 'manageUser', component: ManageUser }
+      children: [{
+          path: '',
+          component: Home
+        },
+        {
+          path: '/home',
+          name: 'home',
+          component: Home
+        },
+        {
+          path: '/myActivity',
+          name: 'myActivity',
+          component: MyActivity
+        },
+        {
+          path: '/manageActivity',
+          name: 'manageActivity',
+          component: ManageActivity
+        },
+        {
+          path: '/manageUser',
+          name: 'manageUser',
+          component: ManageUser
+        },
+        {
+          path: '/manageSignIn',
+          name: 'manageSignIn',
+          component: ManageSignIn
+        },
+        {
+          path: '/manageDanmaku',
+          name: 'manageDanmaku',
+          component: ManageDanmaku
+        },
+        {
+          path: '/manageWin',
+          name: 'manageWin',
+          component: ManageWin
+        },
+        {
+          path: '/manageGame',
+          name: 'manageGame',
+          component: ManageGame
+        }
       ]
     },
 
@@ -57,10 +130,11 @@ const router = new Router({
 // 添加路由守卫
 router.beforeEach((to, from, next) => {
   const isLogin = localStorage.eleToken ? true : false;
-  if (to.path == "/login" || to.path == "/register") {
+  const isSignIn = localStorage.eleSignInToken ? true : false;
+  if (to.path == "/login" || to.path == "/register" || to.path.startsWith("/signIn/")) {
     next();
   } else {
-    isLogin ? next() : next("/login");
+    isLogin || isSignIn ? next() : next("/login");
   }
 })
 

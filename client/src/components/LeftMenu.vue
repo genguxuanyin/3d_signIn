@@ -63,20 +63,20 @@ export default {
           path: "manage",
           children: [
             {
-              path: "signIn",
+              path: "manageSignIn",
               name: "签到"
             },
             {
-              path: "message",
+              path: "manageDanmaku",
               name: "留言"
             },
             {
-              path: "prize",
-              name: "中奖"
+              path: "manageWin",
+              name: "抽奖"
             },
             {
-              path: "game",
-              name: "对对碰"
+              path: "manageGame",
+              name: "游戏"
             }
           ]
         }

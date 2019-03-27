@@ -6,17 +6,31 @@
 
 <script>
 import jwt_decode from "jwt-decode";
+import { getUserInfoById, getSignInUserInfoById } from "./api/index";
 export default {
   name: "app",
   created() {
     if (localStorage.eleToken) {
       const decode = jwt_decode(localStorage.eleToken);
-      this.$axios
-        .get(`/api/users/${decode.id}`)
+      getUserInfoById(decode.id)
         .then(res => {
           // 存储数据
           this.$store.dispatch("setIsAutnenticated", !this.isEmpty(res.data));
           this.$store.dispatch("setUser", res.data);
+        })
+        .catch(err => {
+          throw err;
+        });
+    } else 
+    if (localStorage.eleSignInToken) {
+      this.isSignInAutnenticated = true;
+      const decode = jwt_decode(localStorage.eleSignInToken);
+      getSignInUserInfoById(decode.id)
+        .then(res => {
+          // 存储数据
+          this.$store.dispatch("setIsSignInAutnenticated",!this.isEmpty(res.data));
+          this.$store.dispatch("setSignInUser", res.data);
+          this.$router.push('/mHome');
         })
         .catch(err => {
           throw err;
