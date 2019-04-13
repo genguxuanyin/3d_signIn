@@ -7,6 +7,8 @@ const sequelize = require('../../db/connect');
 const zxfs = require('../../config/fs');
 
 const Win = require('../../models/Win');
+const SignInUser = require('../../models/SignInUser');
+const Activity = require('../../models/Activity');
 
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -36,30 +38,50 @@ router.post(
     if (req.body.remark != undefined) fields.remark = req.body.remark;
     if (req.body.status != undefined) fields.status = req.body.status;
     Win.create(fields)
-      .then(win => res.json({id:win.id}))
+      .then(win => res.json({
+        id: win.id
+      }))
       .catch(err => console.log(err))
   }
 );
 
 
-router.post('/', (req, res, next) => {
-  console.log(req.body)
-  const activityId = req.body.activityId;
-  const signInUserId = req.body.signInUserId;
-  Win.findAll({
-          where: {
-              [Op.and]: [{
-                    activityId: activityId
-                  },{
-                    signInUserId: signInUserId
-                  }
-              ]
-          }
+router.get(
+  '/',
+  passport.authenticate('jwt', {
+    session: false
+  }), (req, res, next) => {
+    Win.findAll({
+        include: [{
+          model: Activity,
+          attributes: ['id', 'name']
+        }, {
+          model: SignInUser,
+          attributes: ['name', 'phone']
+        }]
       })
-      .then(win => {
-          res.json(win);
+      .then(wins => {
+        if (!wins) {
+          return res.status(404).json('没有任何内容');
+        }
+        wins = wins.map((item, index) => {
+          return {
+            id: item.id,
+            name: item.t_signInUser.name,
+            phone: item.t_signInUser.phone,
+            activityId: item.t_activity.id,
+            activityName: item.t_activity.name,
+            winName: item.name,
+            grade: item.grade,
+            remark: item.remark,
+            status: item.status,
+            createdAt: item.createdAt,
+            updatedAt: item.updatedAt
+          }
+        })
+        res.json(wins);
       })
       .catch(err => console.log(err))
-});
+  });
 
 module.exports = router;

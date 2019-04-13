@@ -6,10 +6,28 @@
         <el-form-item label="筛选:">
           <el-input
             v-model="search_data.searchName"
-            placeholder="输入用户名查找"
+            placeholder="输入姓名查找"
             clearable
             @input="onScreeoutUser()"
           ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="search_data.searchPhone"
+            placeholder="输入手机号查找"
+            clearable
+            @input="onScreeoutUser()"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-select
+            v-model="search_data.searchActivityId"
+            clearable
+            placeholder="按活动名称选择"
+            @change="onScreeoutUser()"
+          >
+            <el-option v-for="item in activitys" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
     </div>
@@ -23,23 +41,15 @@
         style="width: 100%"
       >
         <el-table-column type="index" label="序号" align="center" width="60"></el-table-column>
-        <el-table-column type="index" label="用户头像" align="center" width="100">
+        <el-table-column prop="aName" label="活动名称" align="center" width="300">
           <template slot-scope="scope">
-            <img
-              :src="scope.row.avatar.startsWith('//www.gravatar.com')?scope.row.avatar:baseUrl+scope.row.avatar"
-            >
+            <span>{{ scope.row.t_activity.name }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="用户名" align="center" width="150"></el-table-column>
-        <el-table-column prop="email" label="邮箱" align="center" width="250"></el-table-column>
-        <el-table-column prop="identity" label="用户身份" align="center" width="220">
-          <template slot-scope="scope">
-            <span 
-            :style="{color:(scope.row.identity==='manager'?'#f00':'#606266')}"
-            >{{ scope.row.identity==='manager'?'管理员':'普通用户' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" label="注册时间" align="center" width="220" sortable>
+        <el-table-column prop="name" label="姓名" align="center" width="150"></el-table-column>
+        <el-table-column prop="phone" label="手机号" align="center" width="160"></el-table-column>
+        <el-table-column prop="wechatId" label="微信ID" align="center" width="250"></el-table-column>
+        <el-table-column prop="createdAt" label="签到时间" align="center" width="220" sortable>
           <template slot-scope="scope">
             <el-icon name="time"></el-icon>
             <span style="margin-left: 10px">{{ scope.row.createdAt }}</span>
@@ -47,20 +57,7 @@
         </el-table-column>
         <el-table-column prop="operation" align="center" label="操作" fixed="right" width="180">
           <template slot-scope="scope">
-            <el-button
-              v-if="scope.row.status == 0"
-              type="warning"
-              icon="edit"
-              size="small"
-              @click="onEdit(scope.row,1)"
-            >启用</el-button>
-            <el-button
-              v-else
-              type="danger"
-              icon="delete"
-              size="small"
-              @click="onEdit(scope.row,0)"
-            >禁用</el-button>
+            <el-button type="danger" icon="delete" size="small" @click="onEdit(scope.row,1)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,7 +84,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getUsers as _getUsers, editUserInfoById } from "../../api/index";
+import {
+  getSignInList as _getSignInList,
+  getSignInListByAccount as _getSignInListByAccount,
+  editUserInfoById
+} from "../../api/index";
 export default {
   name: "manageUser",
   data() {
@@ -104,61 +105,75 @@ export default {
         layout: "total, sizes, prev, pager, next, jumper" // 翻页属性
       },
       search_data: {
-        searchName: ""
-      }
+        searchName: "",
+        searchPhone: "",
+        searchActivityId: ""
+      },
+      activitys: []
     };
   },
+  computed: {
+    ...mapGetters(["user"])
+  },
   created() {
-    if (this.users.length == 0) {
-      this.getUser();
-    } else {
-      this.allTableData = this.users;
-      this.filterTableData = this.users;
-      // 设置分页数据
-      this.setPaginations();
+    this.getSignInList();
+  },
+  watch: {
+    user() {
+      this.getSignInList();
     }
   },
-  computed: {
-    ...mapGetters(["users"])
-  },
   methods: {
-    getUser() {
-      // 获取表格数据
-      _getUsers()
-        .then(res => {
-          // this.tableData = res.data;
-          this.allTableData = res.data;
-          this.filterTableData = res.data;
-          // 设置分页数据
-          this.setPaginations();
-          this.$store.dispatch("setUsers", res.data);
-        })
-        .catch(err => {
-          console.dir(err);
-          if (err.response.status == 404) {
-            this.$message({
-              message: err.response.data,
-              type: "error"
+    getSignInList() {
+      if (this.user.id!=undefined) {
+        this.__getSignInList()
+          .then(res => {
+            this.allTableData = res.data;
+            this.filterTableData = res.data;
+            var activitys = res.data.map((item, index, arr) => {
+              return { id: item.tActivityId, name: item.t_activity.name };
             });
-          }
-        });
+            this.activitys = this.removeDuplicateItems(activitys);
+            // 设置分页数据
+            this.setPaginations();
+            // this.$store.dispatch("setUsers", res.data);
+          })
+          .catch(err => {
+            console.dir(err);
+            if (err.response.status == 404) {
+              this.$message({
+                message: err.response.data,
+                type: "error"
+              });
+            }
+          });
+      }
+    },
+    __getSignInList() {
+      // 获取表格数据
+      if (this.user.identity === "manager") {
+        return _getSignInList();
+      } else {
+        return _getSignInListByAccount(this.user.name);
+      }
     },
     onEdit(row, option) {
-      if (row.identity == "manager") {
-        this.$message({
-          message: "管理员账号不能被操作",
-          type: "error"
-        });
-        return;
-      }
-      editUserInfoById(row.id, { status: option })
+      /* editUserInfoById(row.id, { status: option })
         .then(res => {
           this.$message("操作成功");
-          this.getUser();
+          this.getSignInList();
         })
         .catch(err => {
           console.dir(err);
-        });
+        }); */
+    },
+    removeDuplicateItems(arr) {
+      var _arr = arr.map(item => {
+        return JSON.stringify(item);
+      });
+      return [...new Set(_arr)].map(item => {
+        return JSON.parse(item);
+      });
     },
     handleCurrentChange(page) {
       // 当前页
@@ -192,8 +207,14 @@ export default {
     onScreeoutUser() {
       // 筛选
       const searchName = this.search_data.searchName;
+      const searchPhone = this.search_data.searchPhone;
+      const searchActivityId = this.search_data.searchActivityId;
       this.allTableData = this.filterTableData.filter(item => {
-        return item.name.includes(searchName);
+        return (
+          item.name.includes(searchName) &&
+          item.phone.includes(searchPhone) &&
+          (item.tActivityId == searchActivityId || searchActivityId == "")
+        );
       });
       // 分页数据
       this.setPaginations();

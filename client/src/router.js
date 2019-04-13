@@ -17,6 +17,7 @@ import ActivityHome from './views/activity/ActivityHome'
 import SignIn from './views/mobile/SignIn'
 import MHome from './views/mobile/MHome'
 import Win from './views/mobile/Win'
+import Danmaku from './views/mobile/Danmaku'
 
 Vue.use(Router)
 
@@ -65,6 +66,11 @@ const router = new Router({
       path: '/win',
       name: 'win',
       component: Win
+    },
+    {
+      path: '/danmaku',
+      name: 'danmaku',
+      component: Danmaku
     },
     {
       path: '/index',

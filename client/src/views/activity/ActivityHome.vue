@@ -1,27 +1,24 @@
 <template>
-    <div class="home">
-      <div class="threeContainer">
-        <ModelSVG
-          :cameraPosition=cameraPosition
-          :src=src
-        ></ModelSVG>
-      </div>
+  <div class="home">
+    <div class="threeContainer">
+      <ModelSVG :cameraPosition="cameraPosition" :src="src"></ModelSVG>
     </div>
+  </div>
 </template>
 <script>
 import ModelSVG from "../../components/three/model-svg";
 export default {
-  name:'activityHome',
-  data(){
+  name: "activityHome",
+  data() {
     return {
       cameraPosition: { x: 0, y: 0, z: 5000 },
-      src:"../../svg/2.svg"
-    }
+      src: "../../svg/2.svg"
+    };
   },
-  components:{
+  components: {
     ModelSVG
   }
-}
+};
 </script>
 
 <style scoped>

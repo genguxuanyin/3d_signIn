@@ -31,7 +31,7 @@ router.post('/signIn', (req, res, next) => {
                         phone: req.body.phone
                     },
                     {
-                        activityId: req.body.activityId
+                        tActivityId: req.body.activityId
                     }
                 ]
             }
@@ -40,11 +40,15 @@ router.post('/signIn', (req, res, next) => {
             if (user) {
                 return res.status(400).json('手机号已被使用');
             }
+            return Activity.findById(req.body.activityId);
+        })
+        .then((activity) => {
             const newUser = new SignInUser({
                 name: req.body.name,
                 phone: req.body.phone,
                 wechatId: req.body.wechatId,
-                activityId: req.body.activityId
+                tActivityId: req.body.activityId,
+                account: activity.account
             });
             newUser.save()
                 .then(user => {
@@ -66,29 +70,6 @@ router.post('/signIn', (req, res, next) => {
         })
 });
 
-// @route  GET api/signInUsers/id
-// @desc   return user by id
-// @access Private
-router.get(
-    '/:id',
-    /* passport.authenticate('jwt', {
-        session: false
-    }), */
-    (req, res, next) => {
-        SignInUser.findById(req.params.id).then(user => {
-                if (!user) {
-                    return res.status(404).json('没有任何内容');
-                }
-                res.json(user);
-            })
-            .catch(err => {
-                console.log(err);
-                res.status(404).json(err)
-            });
-
-    }
-);
-
 // @route  GET api/signInUsers
 // @desc   return all signInUsers
 // @access Private
@@ -98,13 +79,12 @@ router.get(
         session: false
     }),
     (req, res, next) => {
-        SignInUser.findAll(
-            {
-            include: [{
-                model: Activity,
-                attributes:['name']
-            }]
-        })
+        SignInUser.findAll({
+                include: [{
+                    model: Activity,
+                    attributes: ['name']
+                }]
+            })
             .then(signInUsers => {
                 if (!signInUsers) {
                     return res.status(404).json('没有任何内容');
@@ -115,6 +95,31 @@ router.get(
                 console.log(err);
                 res.status(404).json(err)
             });
+    }
+);
+
+// @route  GET api/signInUsers
+// @desc   return all signInUsers
+// @access Private
+router.get(
+    '/:account',
+    passport.authenticate('jwt', {
+        session: false
+    }),
+    (req, res, next) => {
+        SignInUser.findAll({
+                where: {
+                    account: req.params.account
+                },
+                include: [{
+                    model: Activity,
+                    attributes: ['name']
+                }]
+            })
+            .then((signInUsers) => {
+                res.json(signInUsers);
+            })
+            .catch(err => res.status(404).json(err));
     }
 );
 

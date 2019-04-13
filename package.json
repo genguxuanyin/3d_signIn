@@ -8,7 +8,8 @@
     "client": "npm start --prefix client",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "sorket": "nodemon webSorket.js",
+    "dev": "concurrently \"npm run server\" \"npm run sorket\" \"npm run client\""
   },
   "author": "genguxuanyin",
   "license": "ISC",
@@ -28,6 +29,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "sequelize": "^4.42.0",
-    "validator": "^10.2.0"
+    "validator": "^10.2.0",
+    "ws": "^6.2.1"
   }
 }

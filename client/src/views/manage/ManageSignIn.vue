@@ -20,13 +20,13 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-select v-model="search_data.searchActivityId" clearable placeholder="按活动名称选择" @change="onScreeoutUser()">
-            <el-option
-              v-for="item in activitys"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
+          <el-select
+            v-model="search_data.searchActivityId"
+            clearable
+            placeholder="按活动名称选择"
+            @change="onScreeoutUser()"
+          >
+            <el-option v-for="item in activitys" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -57,12 +57,7 @@
         </el-table-column>
         <el-table-column prop="operation" align="center" label="操作" fixed="right" width="180">
           <template slot-scope="scope">
-            <el-button
-              type="danger"
-              icon="delete"
-              size="small"
-              @click="onEdit(scope.row,1)"
-            >删除</el-button>
+            <el-button type="danger" icon="delete" size="small" @click="onEdit(scope.row,1)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -89,7 +84,11 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getSignInList as _getSignInList, editUserInfoById } from "../../api/index";
+import {
+  getSignInList as _getSignInList,
+  getSignInListByAccount as _getSignInListByAccount,
+  editUserInfoById
+} from "../../api/index";
 export default {
   name: "manageUser",
   data() {
@@ -108,46 +107,55 @@ export default {
       search_data: {
         searchName: "",
         searchPhone: "",
-        searchActivityId:""
+        searchActivityId: ""
       },
-      activitys:[]
+      activitys: []
     };
   },
   computed: {
     ...mapGetters(["user"])
   },
-  created(){
+  created() {
     this.getSignInList();
   },
-  watch:{
-    user(){
+  watch: {
+    user() {
       this.getSignInList();
     }
   },
   methods: {
     getSignInList() {
-      // 获取表格数据
-      _getSignInList()
-        .then(res => {
-          this.allTableData = res.data;
-          this.filterTableData = res.data;
-          var activitys = res.data.map((item,index,arr) => {
-            return {id:item.tActivityId,name:item.t_activity.name};
-          });
-          this.activitys = this.removeDuplicateItems(activitys);
-          // 设置分页数据
-          this.setPaginations();
-          // this.$store.dispatch("setUsers", res.data);
-        })
-        .catch(err => {
-          console.dir(err);
-          if (err.response.status == 404) {
-            this.$message({
-              message: err.response.data,
-              type: "error"
+      if (this.user.id!=undefined) {
+        this.__getSignInList()
+          .then(res => {
+            this.allTableData = res.data;
+            this.filterTableData = res.data;
+            var activitys = res.data.map((item, index, arr) => {
+              return { id: item.tActivityId, name: item.t_activity.name };
             });
-          }
-        });
+            this.activitys = this.removeDuplicateItems(activitys);
+            // 设置分页数据
+            this.setPaginations();
+            // this.$store.dispatch("setUsers", res.data);
+          })
+          .catch(err => {
+            console.dir(err);
+            if (err.response.status == 404) {
+              this.$message({
+                message: err.response.data,
+                type: "error"
+              });
+            }
+          });
+      }
+    },
+    __getSignInList() {
+      // 获取表格数据
+      if (this.user.identity === "manager") {
+        return _getSignInList();
+      } else {
+        return _getSignInListByAccount(this.user.name);
+      }
     },
     onEdit(row, option) {
       /* editUserInfoById(row.id, { status: option })
@@ -159,11 +167,11 @@ export default {
           console.dir(err);
         }); */
     },
-    removeDuplicateItems(arr){
-      var _arr = arr.map((item)=>{
+    removeDuplicateItems(arr) {
+      var _arr = arr.map(item => {
         return JSON.stringify(item);
-      })
-      return [...new Set(_arr)].map((item)=>{
+      });
+      return [...new Set(_arr)].map(item => {
         return JSON.parse(item);
       });
     },
@@ -202,9 +210,11 @@ export default {
       const searchPhone = this.search_data.searchPhone;
       const searchActivityId = this.search_data.searchActivityId;
       this.allTableData = this.filterTableData.filter(item => {
-        return item.name.includes(searchName)
-         && item.phone.includes(searchPhone)
-         && (item.tActivityId == searchActivityId || searchActivityId == '');
+        return (
+          item.name.includes(searchName) &&
+          item.phone.includes(searchPhone) &&
+          (item.tActivityId == searchActivityId || searchActivityId == "")
+        );
       });
       // 分页数据
       this.setPaginations();

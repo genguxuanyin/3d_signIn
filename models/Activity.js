@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const moment = require('moment');
 const SignInUser = require('./SignInUser');
 const Danmaku = require('./Danmaku');
+const Win = require('./Win');
 const Activitys = sequelize.define('t_activity', {
     id:{
         type: Sequelize.INTEGER,
@@ -65,5 +66,9 @@ SignInUser.belongsTo(Activitys);
 Activitys.hasMany(Danmaku);
 
 Danmaku.belongsTo(Activitys);
+
+Activitys.hasMany(Win);
+
+Win.belongsTo(Activitys);
 
 module.exports = Activitys;

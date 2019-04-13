@@ -52,7 +52,7 @@ export default {
     const svgLoader = new SVGLoader();
     return {
       loader: svgLoader,
-      MAXNUMBER: 256,
+      MAXNUMBER: 128,
       table: [],
       objects: [],
       targets: {
@@ -165,7 +165,6 @@ export default {
       }
 
       const onLoad = paths => {
-        debugger
         var group = new THREE.Group();
         group.scale.multiplyScalar(0.25);
         group.position.x = -70;

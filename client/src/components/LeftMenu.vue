@@ -20,7 +20,7 @@
               </el-menu-item>
             </router-link>
           </el-submenu>
-          <router-link v-else :to="item.path" :index="item.path" :key="item.path">
+          <router-link v-else :to="item.path" :index="item.path" :key="item.path" v-show="!item.limits || (item.limits && item.limits.length && item.limits.includes(user.identity))">
             <el-menu-item :index="item.path">
               <i :class="item.icon"></i>
               <span slot="title">{{item.name}}</span>
@@ -45,12 +45,14 @@ export default {
         {
           icon: "el-icon-menu",
           name: "用户管理",
-          path: "manageUser"
+          path: "manageUser",
+          limits:['manager']
         },
         {
           icon: "el-icon-menu",
           name: "活动管理",
-          path: "manageActivity"
+          path: "manageActivity",
+          limits:['manager']
         },
         {
           icon: "el-icon-edit-outline",
@@ -82,6 +84,11 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    user() {
+      return this.$store.getters.user;
+    }
   }
 };
 </script>

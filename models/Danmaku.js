@@ -15,6 +15,10 @@ const Danmaku = sequelize.define('t_danmaku', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    account:{
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     message: {
         type: Sequelize.STRING,
         allowNull: false

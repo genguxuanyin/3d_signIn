@@ -36,8 +36,14 @@ export const deleteActivities = (id) => ajax(`${BASE_URL}/activities/delete/${id
 //管理
 //签到列表
 export const getSignInList = () => ajax(`${BASE_URL}/signInUsers`);
+
+export const getSignInListByAccount = (account) => ajax(`${BASE_URL}/signInUsers/${account}`);
 //留言列表
 export const getDanmakuList = () => ajax(`${BASE_URL}/danmakus`);
+
+export const getDanmakuListByAccount = (account) => ajax(`${BASE_URL}/danmakus/${account}`);
+//中奖列表
+export const getWinList = () => ajax(`${BASE_URL}/wins`);
 
 // 2.1 用户签到
 export const signIn = (user) => ajax(`${BASE_URL}/signInUsers/signIn`, user, 'POST');
@@ -47,4 +53,4 @@ export const getSignInUserInfoById = (id) => ajax(`${BASE_URL}/signInUsers/${id}
 // 2.1 添加获奖信息
 export const addWin = (user) => ajax(`${BASE_URL}/wins/add`, user, 'POST');
 // 2.3 根据活动ID和用户ID获取获奖信息
-export const getWin = (activityIdAndUserId) => ajax(`${BASE_URL}/wins/`, activityIdAndUserId, 'POST');
+// export const getWin = (activityIdAndUserId) => ajax(`${BASE_URL}/wins/`, activityIdAndUserId, 'POST');

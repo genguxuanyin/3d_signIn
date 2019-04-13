@@ -20,13 +20,13 @@
           ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-select v-model="search_data.searchActivityId" clearable placeholder="按活动名称选择" @change="onScreeoutUser()">
-            <el-option
-              v-for="item in activitys"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id">
-            </el-option>
+          <el-select
+            v-model="search_data.searchActivityId"
+            clearable
+            placeholder="按活动名称选择"
+            @change="onScreeoutUser()"
+          >
+            <el-option v-for="item in activitys" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
@@ -57,12 +57,7 @@
         </el-table-column>
         <el-table-column prop="operation" align="center" label="操作" fixed="right" width="180">
           <template slot-scope="scope">
-            <el-button
-              type="danger"
-              icon="edit"
-              size="small"
-              @click="onEdit(scope.row,1)"
-            >删除</el-button>
+            <el-button type="danger" icon="edit" size="small" @click="onEdit(scope.row,1)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -108,48 +103,56 @@ export default {
       search_data: {
         searchName: "",
         searchPhone: "",
-        searchActivityId:""
+        searchActivityId: ""
       },
-      activitys:[]
+      activitys: []
     };
   },
   created() {
     this.getDanmakuList();
   },
   computed: {
-    ...mapGetters(["users"])
+    ...mapGetters(["user"])
   },
-  watch:{
-    user(){
+  watch: {
+    user() {
       this.getDanmakuList();
     }
   },
   methods: {
     getDanmakuList() {
-      // 获取表格数据
-      _getDanmakuList()
-        .then(res => {
-          debugger
-          // this.tableData = res.data;
-          this.allTableData = res.data;
-          this.filterTableData = res.data;
-          var activitys = res.data.map((item,index,arr) => {
-            return {id:item.activityId,name:item.activityName};
-          });
-          this.activitys = this.removeDuplicateItems(activitys);
-          // 设置分页数据
-          this.setPaginations();
-          // this.$store.dispatch("setUsers", res.data);
-        })
-        .catch(err => {
-          console.dir(err);
-          if (err.response.status == 404) {
-            this.$message({
-              message: err.response.data,
-              type: "error"
+      if (this.user.id != undefined) {
+        _getDanmakuList()
+          .then(res => {
+            // this.tableData = res.data;
+            this.allTableData = res.data;
+            this.filterTableData = res.data;
+            var activitys = res.data.map((item, index, arr) => {
+              return { id: item.activityId, name: item.activityName };
             });
-          }
-        });
+            this.activitys = this.removeDuplicateItems(activitys);
+            // 设置分页数据
+            this.setPaginations();
+            // this.$store.dispatch("setUsers", res.data);
+          })
+          .catch(err => {
+            console.dir(err);
+            if (err.response.status == 404) {
+              this.$message({
+                message: err.response.data,
+                type: "error"
+              });
+            }
+          });
+      }
+    },
+    __getDanmakuList() {
+      // 获取表格数据
+      if (this.user.identity === "manager") {
+        return _getDanmakuList();
+      } else {
+        return _getDanmakuListByAccount(this.user.name);
+      }
     },
     onEdit(row, option) {
       if (row.identity == "manager") {
@@ -168,11 +171,11 @@ export default {
           console.dir(err);
         });
     },
-    removeDuplicateItems(arr){
-      var _arr = arr.map((item)=>{
+    removeDuplicateItems(arr) {
+      var _arr = arr.map(item => {
         return JSON.stringify(item);
-      })
-      return [...new Set(_arr)].map((item)=>{
+      });
+      return [...new Set(_arr)].map(item => {
         return JSON.parse(item);
       });
     },
@@ -211,9 +214,11 @@ export default {
       const searchPhone = this.search_data.searchPhone;
       const searchActivityId = this.search_data.searchActivityId;
       this.allTableData = this.filterTableData.filter(item => {
-        return item.name.includes(searchName)
-         && item.phone.includes(searchPhone)
-         && (item.activityId == searchActivityId || searchActivityId == '');
+        return (
+          item.name.includes(searchName) &&
+          item.phone.includes(searchPhone) &&
+          (item.activityId == searchActivityId || searchActivityId == "")
+        );
       });
       // 分页数据
       this.setPaginations();

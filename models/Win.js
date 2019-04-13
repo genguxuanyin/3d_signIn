@@ -15,6 +15,10 @@ const Wins = sequelize.define('t_win', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
+    account:{
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     tSignInUserId: {
         type: Sequelize.INTEGER,
         allowNull: false

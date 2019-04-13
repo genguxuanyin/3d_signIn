@@ -2,6 +2,7 @@ const sequelize = require('../db/connect');
 const Sequelize = require('sequelize');
 const moment = require('moment');
 const Danmaku = require('./Danmaku');
+const Win = require('./Win');
 const SignInUser = sequelize.define('t_signInUser', {
     id:{
         type: Sequelize.INTEGER,
@@ -14,6 +15,10 @@ const SignInUser = sequelize.define('t_signInUser', {
     },
     tActivityId: {
         type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    account:{
+        type: Sequelize.STRING,
         allowNull: false
     },
     name: {
@@ -44,5 +49,9 @@ const SignInUser = sequelize.define('t_signInUser', {
 SignInUser.hasMany(Danmaku);
 
 Danmaku.belongsTo(SignInUser);
+
+SignInUser.hasMany(Win);
+
+Win.belongsTo(SignInUser);
 
 module.exports = SignInUser;
